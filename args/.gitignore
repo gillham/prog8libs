@@ -1,0 +1,5 @@
+# build directory
+build/
+
+# REU/GeoRAM files
+*-image.bin
