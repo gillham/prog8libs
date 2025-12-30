@@ -11,6 +11,7 @@ format ubyte or a SNES uword.
 ## Usage
 
 The `joystick.get()` routine supports these devices:
+
 0. virtual keyboard controller (not yet supported)
 1. control port 1 classic joystick
 2. control port 2 classic joystick
@@ -23,6 +24,7 @@ control port joystick values are remapped into the appropriate spot to match the
 missing most of the buttons of course.
 
 The `joystick.get_ub()` routine supports these devices:
+
 0. virtual keyboard controller (not yet supported)
 1. control port 1 classic joystick
 2. control port 2 classic joystick
