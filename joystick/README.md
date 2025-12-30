@@ -11,23 +11,23 @@ format ubyte or a SNES uword.
 ## Usage
 
 The `joystick.get()` routine supports these devices:
- 0 -> virtual keyboard controller (not yet supported)
- 1 -> control port 1 classic joystick
- 2 -> control port 2 classic joystick
- 3 -> control port 1 joystick with 2 or 3 buttons. ( using POTX & POTY for 2&3)
- 4 -> control port 2 joystick with 2 or 3 buttons. ( using POTX & POTY for 2&3)
- 5 -> SNES controller plugged into the PETSCII Robots UserPort adapter.
+0. virtual keyboard controller (not yet supported)
+1. control port 1 classic joystick
+2. control port 2 classic joystick
+3. control port 1 joystick with 2 or 3 buttons. ( using POTX & POTY for 2&3)
+4. control port 2 joystick with 2 or 3 buttons. ( using POTX & POTY for 2&3)
+5. SNES controller plugged into the PETSCII Robots UserPort adapter.
 
 The `joystick.get()` routine returns a uword in the standard SNES format.  The C64
 control port joystick values are remapped into the appropriate spot to match the SNES, but
 missing most of the buttons of course.
 
 The `joystick.get_ub()` routine supports these devices:
- 0 -> virtual keyboard controller (not yet supported)
- 1 -> control port 1 classic joystick
- 2 -> control port 2 classic joystick
- 3 -> control port 1 joystick with 2 or 3 buttons. ( using POTX & POTY for 2&3)
- 4 -> control port 2 joystick with 2 or 3 buttons. ( using POTX & POTY for 2&3)
+0. virtual keyboard controller (not yet supported)
+1. control port 1 classic joystick
+2. control port 2 classic joystick
+3. control port 1 joystick with 2 or 3 buttons. ( using POTX & POTY for 2&3)
+4. control port 2 joystick with 2 or 3 buttons. ( using POTX & POTY for 2&3)
 
 The `joystick.get_usb()` routine returns a ubyte in the classic C64 format.  For the
 multi-button (C64GS style) joysticks, the POTX button is mapped to bit 5 and POTY to bit 6.
