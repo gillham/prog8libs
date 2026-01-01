@@ -53,7 +53,7 @@ main {
             txt.print_uwbin(temp, false)
             txt.nl()
             joystick.decode(temp)
-            if cbm.GETIN2() != 00 break
+            if cbm.GETIN2() == ' ' break
         }
     }
 
@@ -69,7 +69,7 @@ main {
             txt.print_uwbin(pins, false)
             txt.nl()
             joystick.decode(pins)
-            if cbm.GETIN2() != 00 break
+            if cbm.GETIN2() == ' ' break
         }
     }
 
@@ -85,7 +85,7 @@ main {
             txt.print_ubbin(pins, false)
             txt.nl()
             joystick.decode_ub(pins)
-            if cbm.GETIN2() != 00 break
+            if cbm.GETIN2() == ' ' break
         }
     }
 
@@ -101,7 +101,7 @@ main {
             txt.print_uwbin(pins, false)
             txt.nl()
             joystick.decode(pins)
-            if cbm.GETIN2() != 00 break
+            if cbm.GETIN2() == ' ' break
         }
     }
 
@@ -117,7 +117,7 @@ main {
             txt.print_ubbin(pins, false)
             txt.nl()
             joystick.decode_ub(pins)
-            if cbm.GETIN2() != 00 break
+            if cbm.GETIN2() == ' ' break
         }
     }
 
@@ -126,14 +126,14 @@ main {
         repeat {
             sys.waitrasterline(60)
             flash_on()
-            pins = joystick.get(4)
+            pins = joystick.get(2)
             flash_off()
             txt.cls()
 ;            txt.plot(0,0)
             txt.print_uwbin(pins, false)
             txt.nl()
             joystick.decode(pins)
-            if cbm.GETIN2() != 00 break
+            if cbm.GETIN2() == ' ' break
         }
     }
 
@@ -149,7 +149,7 @@ main {
             txt.print_ubbin(pins, false)
             txt.nl()
             joystick.decode_ub(pins)
-            if cbm.GETIN2() != 00 break
+            if cbm.GETIN2() == ' ' break
         }
     }
 
@@ -165,7 +165,7 @@ main {
             txt.print_uwbin(pins, false)
             txt.nl()
             joystick.decode(pins)
-            if cbm.GETIN2() != 00 break
+            if cbm.GETIN2() == ' ' break
         }
     }
 
@@ -181,7 +181,7 @@ main {
             txt.print_ubbin(pins, false)
             txt.nl()
             joystick.decode_ub(pins)
-            if cbm.GETIN2() != 00 break
+            if cbm.GETIN2() == ' ' break
         }
     }
 
