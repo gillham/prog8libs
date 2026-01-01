@@ -13,8 +13,8 @@ joystick {
     sub get(ubyte joynum) -> uword {
         when joynum {
             0 -> return $00
-            1 -> return remap((c64.CIA1PRB | %11100000))
-            2 -> return remap((c64.CIA1PRA | %11100000))
+            1 -> return remap(read_cp1())
+            2 -> return remap(read_cp2())
             3 -> return remap(read_cpgs_ub(1))
             4 -> return remap(read_cpgs_ub(2))
             5 -> return read_petscii_snes()
@@ -24,8 +24,8 @@ joystick {
     sub get_ub(ubyte joynum) -> ubyte {
         when joynum {
             0 -> return $00
-            1 -> return (c64.CIA1PRB | %11100000)
-            2 -> return (c64.CIA1PRA | %11100000)
+            1 -> return read_cp1()
+            2 -> return read_cp2()
             3 -> return read_cpgs_ub(1)
             4 -> return read_cpgs_ub(2)
         }
@@ -33,8 +33,7 @@ joystick {
 
     inline asmsub set_potxy(ubyte value @A) {
         %asm {{
-            ;lda  #$80   ; enable control port 2
-            sta  $dc00  ; set which control port to read
+            sta  $dc00  ; set which control port paddles for SID to read 
         }}
     }
 
@@ -66,41 +65,69 @@ joystick {
         return ~result
     }
 
+    asmsub read_cp1() -> ubyte @A {
+        %asm {{
+            sei
+            ldx  #$7f
+            stx  c64.CIA1ICR    ; disable all CIA1 interrupts
+            ldx  #$ff
+            stx  c64.CIA1PRA    ; set all port *A* high to ignore all columns
+            lda  c64.CIA1PRB    ; read port *B* (control port 1) now
+            ora  #%11100000     ; mask off non joystick bits
+            ldx  #$81
+            stx  c64.CIA1ICR    ; re-enable CIA1 timer A interrupt
+            cli
+            rts
+        }}
+    }
+
+    asmsub read_cp2() -> ubyte @A {
+        %asm {{
+            sei
+            ldx  #$7f
+            stx  c64.CIA1ICR    ; disable all CIA1 interrupts
+;            ldx  #$ff
+;            stx  c64.CIA1PRA    ; set all port *A* high to ignore all columns
+            lda  c64.CIA1PRA    ; read port two
+            ora  #%11100000     ; mask off non joystick bits
+            ldx  #$81
+            stx  c64.CIA1ICR    ; re-enable CIA1 timer A interrupt
+            cli
+            rts
+        }}
+    }
+
     sub read_cpgs_ub(ubyte port) -> ubyte {
         ubyte pins
 
         when port {
             1 -> {
-                pins = c64.CIA1PRB | %11100000
-                joystick.set_potxy($40)
+                pins = read_cp1()
+                read_potxy($7f)
             }
             2 -> {
-                pins = c64.CIA1PRA | %11100000
-                joystick.set_potxy($80)
+                pins = read_cp2()
+                read_potxy($bf)
             }
         }
 
-        ; need 1023 cycle delay?
-        joystick.read_potxy()
-
-        if joystick.read_potxy.potx < $40 {
+        if joystick.read_potxy.potx < $10 {
             pins &= ~FIRE_B
         }
-        if joystick.read_potxy.poty < $40 {
+        if joystick.read_potxy.poty < $10 {
             pins &= ~FIRE_C
         }
         return pins
     }
 
-    sub read_potxy() {
+    sub read_potxy(ubyte cfg) {
         ubyte potx
         ubyte poty
         %asm {{
-            ;lda  #$40  ; enable control port 1
-;            lda  #$80   ; enable control port 2
             sei         ; disable interrupts
-;            sta  $dc00  ; set to read control port potx/poty
-            ldx  #$72   ; burn 1023 cycles (validate how many are really needed)
+            lda  p8b_joystick.p8s_read_potxy.p8v_cfg
+            sta  $dc00  ; set to read control port potx/poty
+            ldx  #$72   ; burn 1023 cycles (ish)
 -           nop
             nop
             dex
