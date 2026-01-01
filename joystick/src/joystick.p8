@@ -97,14 +97,14 @@ joystick {
         ubyte poty
         %asm {{
             ;lda  #$40  ; enable control port 1
-            lda  #$80   ; enable control port 2
+;            lda  #$80   ; enable control port 2
             sei         ; disable interrupts
-            sta  $dc00  ; set to read control port potx/poty
-;            ldx  #$75   ; burn 1023 cycles (validate how many are really needed)
-;-           nop
-;            nop
-;            dex
-;            bne  -
+;            sta  $dc00  ; set to read control port potx/poty
+            ldx  #$72   ; burn 1023 cycles (validate how many are really needed)
+-           nop
+            nop
+            dex
+            bne  -
             lda  $d419  ; read paddle X value
             sta  p8b_joystick.p8s_read_potxy.p8v_potx
             lda  $d41a  ; read paddle Y value
