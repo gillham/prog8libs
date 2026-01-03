@@ -31,7 +31,12 @@ snes_petscii {
 %option force_output
 %option merge
 
-    ^^input.Device dev0 = ^^input.Device: [ read, 5, "SNES PETSCII UPort", "snes-up" ]
+    ^^input.Device dev0 = ^^input.Device: [ read,
+                                            input.CONTROLLER,
+                                            8,
+                                            input.CTL_SNES,
+                                            "snes petscii uport",
+                                            "snes-up" ]
 
     sub read() {
         uword pins

@@ -1,7 +1,13 @@
 ;
-; dummy example of a test joystick
+; C64 control port joysticks
+; This module supports vanilla C64 joysticks
+; with a signle fire button as well as C64GS
+; style with a 2nd on POTX.  A 3rd on POTY
+; is also supported. 
 ;
-
+; A 5 button joystick using up&down and left&right
+; for buttons 4 and 5 should be easy enouhg to
+; support once I get one.
 ;
 ; This block holds a uword pointer to a Device
 ; struct. *NOTHING* else should be in this block.
@@ -27,17 +33,36 @@ l_joystick:
 }
 
 ;
-; Should "name" be just the index 0 entry of "devnames" here?
-; Then loops could be 1 to count instead of 0 to count-1?
+; 
 ;
 joystick {
 %option force_output
 %option merge
 
-    ^^input.Device dev0 = ^^input.Device: [ read_port1, 5, "Joystick port 1", "port1" ]
-    ^^input.Device dev1 = ^^input.Device: [ read_port2, 5, "Joystick port 2", "port2" ]
-    ^^input.Device dev2 = ^^input.Device: [ read_cp1gs, 5, "C64GS port 1", "cp1gs" ]
-    ^^input.Device dev3 = ^^input.Device: [ read_cp2gs, 5, "C64GS port 2", "cp2gs" ]
+    ^^input.Device dev0 = ^^input.Device: [ read_port1,
+                                            input.JOYSTICK,
+                                            1,
+                                            input.JOY_CP,
+                                            "joystick 1",
+                                            "port1" ]
+    ^^input.Device dev1 = ^^input.Device: [ read_port2,
+                                            input.JOYSTICK,
+                                            1,
+                                            input.JOY_CP,
+                                            "joystick 2",
+                                            "port2" ]
+    ^^input.Device dev2 = ^^input.Device: [ read_cp1gs,
+                                            input.JOYSTICK,
+                                            2,
+                                            input.JOY_CPGS,
+                                            "c64gs port 1",
+                                            "cp1gs" ]
+    ^^input.Device dev3 = ^^input.Device: [ read_cp2gs,
+                                            input.JOYSTICK,
+                                            2,
+                                            input.JOY_CPGS,
+                                            "c64gs port 2",
+                                            "cp2gs" ]
 
     sub read_port1() {
         input.get.result = input.remap(read_cp1())

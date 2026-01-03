@@ -32,19 +32,19 @@ main {
 
     sub decode(uword temp) {
         ; upper byte
-        if (temp & input.BUTTON_B_MASK) == 0 txt.print("button_b\n")
-        if (temp & input.BUTTON_Y_MASK) == 0 txt.print("button_y\n")
-        if (temp & input.BUTTON_SELECT_MASK) == 0 txt.print("button_select\n")
-        if (temp & input.BUTTON_START_MASK) == 0 txt.print("button_start\n")
-        if (temp & input.DPAD_UP_MASK) == 0 txt.print("dpad_up\n")
-        if (temp & input.DPAD_DOWN_MASK) == 0 txt.print("dpad_down\n")
-        if (temp & input.DPAD_LEFT_MASK) == 0 txt.print("dpad_left\n")
-        if (temp & input.DPAD_RIGHT_MASK) == 0 txt.print("dpad_right\n")
+        if (temp & input.BUTTON_B) == 0 txt.print("button_b\n")
+        if (temp & input.BUTTON_Y) == 0 txt.print("button_y\n")
+        if (temp & input.BUTTON_SELECT) == 0 txt.print("button_select\n")
+        if (temp & input.BUTTON_START) == 0 txt.print("button_start\n")
+        if (temp & input.DPAD_UP) == 0 txt.print("dpad_up\n")
+        if (temp & input.DPAD_DOWN) == 0 txt.print("dpad_down\n")
+        if (temp & input.DPAD_LEFT) == 0 txt.print("dpad_left\n")
+        if (temp & input.DPAD_RIGHT) == 0 txt.print("dpad_right\n")
 
         ; lower byte
-        if (temp & input.BUTTON_A_MASK) == 0 txt.print("button_a\n")
-        if (temp & input.BUTTON_X_MASK) == 0 txt.print("button_x\n")
-        if (temp & input.BUTTON_L_MASK) == 0 txt.print("button_l\n")
-        if (temp & input.BUTTON_R_MASK) == 0 txt.print("button_r\n")
+        if (temp & input.BUTTON_A) == 0 txt.print("button_a\n")
+        if (temp & input.BUTTON_X) == 0 txt.print("button_x\n")
+        if (temp & input.BUTTON_L) == 0 txt.print("button_l\n")
+        if (temp & input.BUTTON_R) == 0 txt.print("button_r\n")
     }
 }

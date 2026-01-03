@@ -1,6 +1,11 @@
 ;
-; dummy example of a test joystick
+; Simplistic "virtual joystick" via the keyboard
 ;
+; This should get more keys/buttons assigned since
+; the keyboard has plenty.
+; A custom keyboard driver/scanner would allow
+; detecting 2+ keys and generally would be better
+; than this which just calls cbm.GETIN2()
 
 ;
 ; This block holds a uword pointer to a Device
@@ -24,25 +29,30 @@ l_joykey:
 }
 
 ;
-; Should "name" be just the index 0 entry of "devnames" here?
-; Then loops could be 1 to count instead of 0 to count-1?
+; Device blocks should be unique and should potentially be
+; longer to avoid any collisions with common keywords.
 ;
 joykey {
 %option force_output
 %option merge
 
-    ^^input.Device dev0 = ^^input.Device: [ read_keyb, 5, "Keyboard Joystick", "keyb" ]
+    ^^input.Device dev0 = ^^input.Device: [ read_keyb,
+                                            input.JOYSTICK,
+                                            1,
+                                            input.JOY_CP,
+                                            "keyboard koystick",
+                                            "keyb" ]
 
     sub read_keyb() {
         ubyte key = cbm.GETIN2()
         uword temp
         when key {
             $00      -> {}
-            'w', 'W', $91 -> temp |= input.DPAD_UP_MASK
-            'a', 'A', $9d -> temp |= input.DPAD_LEFT_MASK
-            's', 'S', $11 -> temp |= input.DPAD_DOWN_MASK
-            'd', 'D', $1d -> temp |= input.DPAD_RIGHT_MASK
-            $0d           -> temp |= input.BUTTON_A_MASK
+            'w', 'W', $91 -> temp |= input.DPAD_UP
+            'a', 'A', $9d -> temp |= input.DPAD_LEFT
+            's', 'S', $11 -> temp |= input.DPAD_DOWN
+            'd', 'D', $1d -> temp |= input.DPAD_RIGHT
+            $0d           -> temp |= input.BUTTON_A
             else -> txt.print_ubhex(key, true)
         }
         input.get.result = ~temp

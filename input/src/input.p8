@@ -14,29 +14,38 @@ input {
     const ubyte FIRE_C  = %1000000
 
     ; SNES bits
-    const uword BUTTON_B_MASK       = %1000000000000000
-    const uword BUTTON_Y_MASK       = %0100000000000000
-    const uword BUTTON_SELECT_MASK  = %0010000000000000
-    const uword BUTTON_START_MASK   = %0001000000000000
-    const uword DPAD_UP_MASK        = %0000100000000000
-    const uword DPAD_DOWN_MASK      = %0000010000000000
-    const uword DPAD_LEFT_MASK      = %0000001000000000
-    const uword DPAD_RIGHT_MASK     = %0000000100000000
-    const uword BUTTON_A_MASK       = %0000000010000000
-    const uword BUTTON_X_MASK       = %0000000001000000
-    const uword BUTTON_L_MASK       = %0000000000100000
-    const uword BUTTON_R_MASK       = %0000000000010000
+    const uword BUTTON_B        = %1000000000000000
+    const uword BUTTON_Y        = %0100000000000000
+    const uword BUTTON_SELECT   = %0010000000000000
+    const uword BUTTON_START    = %0001000000000000
+    const uword DPAD_UP         = %0000100000000000
+    const uword DPAD_DOWN       = %0000010000000000
+    const uword DPAD_LEFT       = %0000001000000000
+    const uword DPAD_RIGHT      = %0000000100000000
+    const uword BUTTON_A        = %0000000010000000
+    const uword BUTTON_X        = %0000000001000000
+    const uword BUTTON_L        = %0000000000100000
+    const uword BUTTON_R        = %0000000000010000
 
-    struct Driver {
-        uword get
-        ubyte count
-        str name
-        uword devnames
-    }
+    ; input device types
+    ; (more like classes)
+    const ubyte JOYSTICK    = 0
+    const ubyte CONTROLLER  = 1
+    const ubyte JOYKEY      = 2
+    const ubyte KEYBOARD    = 3
+    const ubyte MOUSE       = 4
+    const ubyte TRACKBALL   = 6
+
+    ; predefined features
+    const uword JOY_CP      = DPAD_UP|DPAD_DOWN|DPAD_LEFT|DPAD_RIGHT|BUTTON_A
+    const uword JOY_CPGS    = JOY_CP|BUTTON_B|BUTTON_X
+    const uword CTL_SNES    = %1111111111110000
 
     struct Device {
-        uword get
-        ubyte count
+        uword get           ; address of get routine for call()
+        ubyte type          ; input device type
+        ubyte buttons       ; number of buttons (excluding dpad / directions)
+        uword features      ; SNES bit set (1) if button present
         str name
         str short_name
     }
@@ -60,20 +69,20 @@ input {
         }
         txt.plot(0,line)
         ; upper byte
-        if (temp & BUTTON_B_MASK) == 0 txt.print("button_b\n")
-        if (temp & BUTTON_Y_MASK) == 0 txt.print("button_y\n")
-        if (temp & BUTTON_SELECT_MASK) == 0 txt.print("button_select\n")
-        if (temp & BUTTON_START_MASK) == 0 txt.print("button_start\n")
-        if (temp & DPAD_UP_MASK) == 0 txt.print("dpad_up\n")
-        if (temp & DPAD_DOWN_MASK) == 0 txt.print("dpad_down\n")
-        if (temp & DPAD_LEFT_MASK) == 0 txt.print("dpad_left\n")
-        if (temp & DPAD_RIGHT_MASK) == 0 txt.print("dpad_right\n")
+        if (temp & BUTTON_B) == 0 txt.print("button_b\n")
+        if (temp & BUTTON_Y) == 0 txt.print("button_y\n")
+        if (temp & BUTTON_SELECT) == 0 txt.print("button_select\n")
+        if (temp & BUTTON_START) == 0 txt.print("button_start\n")
+        if (temp & DPAD_UP) == 0 txt.print("dpad_up\n")
+        if (temp & DPAD_DOWN) == 0 txt.print("dpad_down\n")
+        if (temp & DPAD_LEFT) == 0 txt.print("dpad_left\n")
+        if (temp & DPAD_RIGHT) == 0 txt.print("dpad_right\n")
 
         ; lower byte
-        if (temp & BUTTON_A_MASK) == 0 txt.print("button_a\n")
-        if (temp & BUTTON_X_MASK) == 0 txt.print("button_x\n")
-        if (temp & BUTTON_L_MASK) == 0 txt.print("button_l\n")
-        if (temp & BUTTON_R_MASK) == 0 txt.print("button_r\n")
+        if (temp & BUTTON_A) == 0 txt.print("button_a\n")
+        if (temp & BUTTON_X) == 0 txt.print("button_x\n")
+        if (temp & BUTTON_L) == 0 txt.print("button_l\n")
+        if (temp & BUTTON_R) == 0 txt.print("button_r\n")
     }
 
     sub init() -> bool {
@@ -137,25 +146,25 @@ input {
         uword result
         pins = ~pins
         if pins & UP != 0 {
-            result |= DPAD_UP_MASK
+            result |= DPAD_UP
         }
         if pins & DOWN != 0 {
-            result |= DPAD_DOWN_MASK
+            result |= DPAD_DOWN
         }
         if pins & LEFT != 0 {
-            result |= DPAD_LEFT_MASK
+            result |= DPAD_LEFT
         }
         if pins & RIGHT != 0 {
-            result |= DPAD_RIGHT_MASK
+            result |= DPAD_RIGHT
         }
         if pins & FIRE != 0 {
-            result |= BUTTON_A_MASK
+            result |= BUTTON_A
         }
         if pins & FIRE_B != 0 {
-            result |= BUTTON_B_MASK
+            result |= BUTTON_B
         }
         if pins & FIRE_C != 0 {
-            result |= BUTTON_X_MASK
+            result |= BUTTON_X
         }
         return ~result
     }
