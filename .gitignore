@@ -1,0 +1,6 @@
+# macOS desktop files
+.DS_Store
+# ignore build directory
+build/
+# ignore CTags files
+tags

@@ -31,7 +31,7 @@ The `joystick.get_ub()` routine supports these devices:
 3. control port 1 joystick with 2 or 3 buttons. ( using POTX & POTY for 2&3)
 4. control port 2 joystick with 2 or 3 buttons. ( using POTX & POTY for 2&3)
 
-The `joystick.get_usb()` routine returns a ubyte in the classic C64 format.  For the
+The `joystick.get_ub()` routine returns a ubyte in the classic C64 format.  For the
 multi-button (C64GS style) joysticks, the POTX button is mapped to bit 5 and POTY to bit 6.
 
 Here is reading joystick 1 (control port 1, standard joystick, but SNES uword format)
@@ -57,7 +57,7 @@ main {
 # Testing
 
 You can use `src/tester.p8` (`make` generates `build/tester.prg`) to test the different joystick configurations.  Just select it from the menu.  Then press buttons on the controller to see
-the bits change and decode the buttons.  Press a key on the keyboard to go back to the menu.
+the bits change and decode the buttons.  Press the keyboard spacebar to go back to the menu.
 
 The `tester.prg` menu:
 ![tester menu](images/joystick-tester-menu.png "Screenshot showing tester.prg menu on C64")
