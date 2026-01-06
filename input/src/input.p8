@@ -1,8 +1,9 @@
 ;
-; scaffolding / getters / setters?
-; query metadata here
+; This is meant to be a fairly generic input library.
+; It is currently focused on joysticks/controllers
 ;
 input {
+%option no_symbol_prefixing, ignore_unused
 %option force_output
     ; joystick bits
     const ubyte UP      = %0000001
@@ -10,8 +11,10 @@ input {
     const ubyte LEFT    = %0000100
     const ubyte RIGHT   = %0001000
     const ubyte FIRE    = %0010000
-    const ubyte FIRE_B  = %0100000
-    const ubyte FIRE_C  = %1000000
+    const ubyte FIRE_B  = %0100000  ; POTX
+    const ubyte FIRE_C  = %1000000  ; POTY
+    const ubyte SELECT  = %0000011  ; UP+DOWN together
+    const ubyte START   = %0001100  ; LEFT+RIGHT together
 
     ; SNES bits
     const uword BUTTON_B        = %1000000000000000
@@ -165,6 +168,12 @@ input {
         }
         if pins & FIRE_C != 0 {
             result |= BUTTON_X
+        }
+        if pins & SELECT == SELECT {
+            result |= BUTTON_SELECT
+        }
+        if pins & START == START {
+            result |= BUTTON_START
         }
         return ~result
     }
