@@ -1,5 +1,6 @@
 ;
-; dummy example of a test joystick
+; SNES controller with the PETSCII Robots UserPort adapter.
+; This modules supports a single SNES controller.
 ;
 
 ;

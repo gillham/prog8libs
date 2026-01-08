@@ -1,5 +1,5 @@
 %import input
-%import input_joykey
+%import input_keyboard
 %import input_joystick
 %import input_snes_petscii
 %import textio

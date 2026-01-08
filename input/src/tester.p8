@@ -1,48 +1,39 @@
 %zeropage dontuse
 
 %import input
-%import input_joykey
+%import input_keyboard
 %import input_joystick
 %import input_snes_petscii
 
+%import strings
 %import textio
 
 main {
+    ^^input.Device mydev
+    ubyte key
+
     sub start() {
-        ubyte i
-        ubyte key
         ubyte port = 255
         uword pins
         uword last_pins
-        txt.lowercase()
+        ;txt.lowercase()
+;        draw.screen()
+;        repeat{draw.animate($1234)}
+;        ^^input.Device mydev
         repeat {
             last_pins = 255
             txt.cls()
+            draw.screen()
             ;input.info()
-            txt.print("--=== Controller Menu ===--")
-            txt.nl()
-            for i in 1 to input.count() {
-                ^^input.Device mydev = input.getdev(i-1)
-                txt.print_ub(i)
-                txt.chrout('.')
-                txt.spc()
-                txt.print(mydev.name)
-                txt.nl()
-            }
-
-            txt.print("choice? 1-")
-            txt.print_ub(input.count())
-            while port < 1 or port > input.count() {
-                key = txt.waitkey()
-                port = key - '0'
-            }
-            port--
-
+            txt.plot(0,0)
+            port = selector()
             mydev = input.getdev(port)
 
             txt.cls()
+            draw.screen()
             repeat {
-                if cbm.GETIN2() == ' ' break
+                key = cbm.GETIN2()
+                if key == ' ' or key == 'j' or key == 'm' break
                 pins = input.get(port)
                 if pins == last_pins continue
                 last_pins = pins
@@ -50,9 +41,540 @@ main {
                 txt.print_uwbin(pins, false)
                 txt.spc()
                 txt.print(mydev.name)
-                input.decode(1,pins)
+                ;input.decode(1,pins)
+                decode(pins)
             }
             key = port = 0
+        }
+    }
+
+    sub decode(uword temp) {
+
+        ; upper byte
+        if (temp & input.BUTTON_B) == 0 {
+            draw.buttons.circle(27,19,2)     ; B
+        } else {
+            draw.buttons.circle(27,19,6)     ; B
+        }
+        if (temp & input.BUTTON_Y) == 0 {
+            draw.buttons.circle(24,17,2)     ; Y
+        } else {
+            draw.buttons.circle(24,17,14)    ; Y
+        }
+        if (temp & input.BUTTON_SELECT) == 0 {
+            draw.selectstart.half(16,18,2)      ; select
+            draw.selectstart.half(17,17,2)      ; select
+        } else {
+            draw.selectstart.half(16,18,11)      ; select
+            draw.selectstart.half(17,17,11)      ; select
+        }
+        if (temp & input.BUTTON_START) == 0 {
+            draw.selectstart.half(19,18,2)      ; start
+            draw.selectstart.half(20,17,2)      ; start
+        } else {
+            draw.selectstart.half(19,18,11)      ; start
+            draw.selectstart.half(20,17,11)      ; start
+        }
+        if (temp & input.DPAD_UP) == 0 {
+            draw.dpad.updown(16, 2)      ; up
+        } else {
+            draw.dpad.updown(16, 11)      ; up
+        }
+        if (temp & input.DPAD_DOWN) == 0 {
+            draw.dpad.updown(19, 2)      ; down
+        } else {
+            draw.dpad.updown(19, 11)      ; down
+        }
+        if (temp & input.DPAD_LEFT) == 0 {
+            draw.dpad.leftright(8, 2)    ; left
+        } else {
+            draw.dpad.leftright(8, 11)    ; left
+        }
+        if (temp & input.DPAD_RIGHT) == 0 {
+            draw.dpad.leftright(11, 2)   ; right
+        } else {
+            draw.dpad.leftright(11, 11)   ; right
+        }
+
+        ; lower byte
+        if (temp & input.BUTTON_A) == 0 {
+            draw.buttons.circle(30,17,2)     ; A
+        } else {
+            draw.buttons.circle(30,17,6)     ; A
+        }
+        if (temp & input.BUTTON_X) == 0 {
+            draw.buttons.circle(27,15,2)    ; X
+        } else {
+            draw.buttons.circle(27,15,14)    ; X
+        }
+        if (temp & input.BUTTON_L) == 0 {
+            draw.shoulders.left(2)            ; left shoulder
+        } else {
+            draw.shoulders.left(15)            ; left shoulder
+        }
+        if (temp & input.BUTTON_R) == 0 {
+            draw.shoulders.right(2)           ; right shoulder
+        } else {
+            draw.shoulders.right(15)           ; right shoulder
+        }
+    }
+
+    sub menu() -> ubyte {
+        ubyte i
+        ubyte port
+        txt.plot(0,0)
+        txt.print("      --=== controller menu ===--")
+        txt.nl()
+        for i in 1 to input.count() {
+            mydev = input.getdev(i-1)
+            txt.print_ub(i)
+            txt.chrout('.')
+            txt.spc()
+            txt.print(mydev.name)
+            txt.nl()
+        }
+
+        txt.print("choice? 1-")
+        txt.print_ub(input.count())
+        while port < 1 or port > input.count() {
+            key = txt.waitkey()
+            port = key - '0'
+        }
+        port--
+        return port
+    }
+
+    sub selector() -> ubyte {
+        ubyte index = 0
+        ubyte last_index = 1        ; needs to be different from index initially
+        ubyte count = input.count()
+        bool done = false
+        ;uword pins = $ffff
+        ubyte length
+        bool last_button_a
+        bool last_dpad_left
+        bool last_dpad_right
+
+        do {
+            if index != last_index {
+                last_index = index
+                txt.plot(0,9)
+                repeat txt.DEFAULT_WIDTH {
+                    txt.spc()
+                }
+            }
+            mydev = input.getdev(index)
+            length = strings.length(mydev.name)
+            if length+6 < txt.DEFAULT_WIDTH {
+                txt.plot((txt.DEFAULT_WIDTH-length-6)/2,9)
+            } else {
+                txt.plot(0,9)
+            }
+            txt.color(5)
+            txt.rvs_on()
+            txt.print("<< ")
+            txt.print(mydev.name)
+            txt.print(" >>")
+            txt.rvs_off()
+            ;input.clear()
+            input.scan_all()
+            ;i=0
+            ;repeat count {
+            ;    pins &= input.get(i)
+            ;    i++
+            ;}
+            ;decode(pins)
+            done = input.button_a or input.button_b or input.button_x
+            done = done or input.button_y or input.button_r or input.button_l
+            ;if input.button_a != last_button_a and input.button_a == true done=true
+            if input.dpad_left != last_dpad_left and input.dpad_left == true {
+                if index > 0
+                    index--
+            }
+            if input.dpad_right != last_dpad_right and input.dpad_right == true {
+                if index < count-1
+                    index++
+            }
+            last_button_a = input.button_a
+            last_dpad_left = input.dpad_left
+            last_dpad_right = input.dpad_right
+            ;pins = $ffff
+            if cbm.GETIN2() == 'm' {
+                txt.plot(0,9)
+                repeat txt.DEFAULT_WIDTH {
+                    txt.spc()
+                }
+                return menu()
+            }
+        } until done
+        return index
+    }
+}
+
+draw {
+    sub screen() {
+        ; set colors -- make portable
+        c64.EXTCOL = 0
+        c64.BGCOL0 = 0
+
+        ; draw initial state
+        controller()
+        dpad()
+        selectstart()
+        buttons()
+        shoulders()
+    }
+
+    sub animate(uword pins) {
+        ;animate...
+        repeat 1 {
+            sys.wait(40)
+
+            draw.dpad.updown(16, 2)      ; up
+            sys.wait(20)
+            draw.dpad.updown(16, 11)      ; up
+
+            draw.dpad.updown(19, 2)      ; down
+            sys.wait(20)
+            draw.dpad.updown(19, 11)      ; down
+
+            draw.dpad.leftright(8, 2)    ; left
+            sys.wait(20)
+            draw.dpad.leftright(8, 11)    ; left
+
+            draw.dpad.leftright(11, 2)   ; right
+            sys.wait(20)
+            draw.dpad.leftright(11, 11)   ; right
+
+            draw.selectstart.half(16,18,2)      ; select
+            draw.selectstart.half(17,17,2)      ; select
+            sys.wait(20)
+            draw.selectstart.half(16,18,11)      ; select
+            draw.selectstart.half(17,17,11)      ; select
+
+            draw.selectstart.half(19,18,2)      ; start
+            draw.selectstart.half(20,17,2)      ; start
+            sys.wait(20)
+            draw.selectstart.half(19,18,11)      ; start
+            draw.selectstart.half(20,17,11)      ; start
+
+            draw.buttons.circle(30,17,2)     ; A
+            sys.wait(20)
+            draw.buttons.circle(30,17,6)     ; A
+
+            draw.buttons.circle(27,19,2)     ; B
+            sys.wait(20)
+            draw.buttons.circle(27,19,6)     ; B
+
+            draw.buttons.circle(27,15,2)    ; X
+            sys.wait(20)
+            draw.buttons.circle(27,15,14)    ; X
+
+            draw.buttons.circle(24,17,2)    ; Y
+            sys.wait(20)
+            draw.buttons.circle(24,17,14)    ; Y
+
+            draw.shoulders.left(2)            ; left shoulder
+            sys.wait(20)
+            draw.shoulders.left(15)            ; left shoulder
+
+            draw.shoulders.right(2)           ; right shoulder
+            sys.wait(20)
+            draw.shoulders.right(15)           ; right shoulder
+        }
+    }
+
+    sub controller() {
+
+        ; top line
+        txt.color(15)       ; need color defines
+        txt.plot(7,12)
+        txt.chrout(scr2pet($4e))
+        repeat 23 {
+            txt.chrout(scr2pet($77))
+        }
+        txt.chrout(scr2pet($4d))
+
+        ; second line
+        txt.plot(6,13)
+        txt.chrout(scr2pet($4e))
+        txt.plot(32,13)
+        txt.chrout(scr2pet($4d))
+
+        ; third line
+        txt.plot(5,14)
+        txt.chrout(scr2pet($4e))
+        txt.plot(33,14)
+        txt.chrout(scr2pet($4d))
+
+        ; 4th line
+        txt.plot(4,15)
+        txt.chrout(scr2pet($5d))
+        txt.plot(34,15)
+        txt.chrout(scr2pet($5d))
+
+        ; 5th line
+        txt.plot(4,16)
+        txt.chrout(scr2pet($5d))
+        txt.plot(34,16)
+        txt.chrout(scr2pet($5d))
+
+        ; 6th line
+        txt.plot(4,17)
+        txt.chrout(scr2pet($5d))
+        txt.plot(34,17)
+        txt.chrout(scr2pet($5d))
+
+        ; 7th line
+        txt.plot(4,18)
+        txt.chrout(scr2pet($5d))
+        txt.plot(34,18)
+        txt.chrout(scr2pet($5d))
+
+        ; 8th line
+        txt.plot(4,19)
+        txt.chrout(scr2pet($5d))
+        txt.plot(34,19)
+        txt.chrout(scr2pet($5d))
+
+        ; 9th line
+        txt.plot(5,20)
+        txt.chrout(scr2pet($4d))
+        txt.plot(33,20)
+        txt.chrout(scr2pet($4e))
+
+        ; 10th line
+        txt.plot(6,21)
+        txt.chrout(scr2pet($4d))
+        txt.plot(32,21)
+        txt.chrout(scr2pet($4e))
+
+        ; 11th line
+        txt.plot(7,22)
+        txt.chrout(scr2pet($4d))
+        txt.plot(14,22)
+        txt.chrout(scr2pet($4e))
+        repeat 9 {
+            txt.chrout(scr2pet($77))
+        }
+        txt.chrout(scr2pet($4d))
+        txt.plot(31,22)
+        txt.chrout(scr2pet($4e))
+
+        ; 12th line
+        txt.plot(8,23)
+        repeat 6 {
+            txt.chrout(scr2pet($77))
+        }
+        txt.plot(25,23)
+        repeat 6 {
+            txt.chrout(scr2pet($77))
+        }
+    }
+
+    sub dpad() {
+        txt.color(11)
+        ; center of dpad
+        txt.plot(9,17)
+        txt.rvs_on()
+        txt.chrout(scr2pet($fe))
+        txt.chrout(scr2pet($fc))
+        txt.plot(9,18)
+        txt.chrout(scr2pet($fb))
+        txt.chrout(scr2pet($ec))
+        txt.rvs_off()
+
+        updown(16, 11)  ; up
+        updown(19, 11)  ; down
+        leftright(8, 11) ; left
+        leftright(11, 11) ; right
+
+        label_left(1)   ; color white
+        label_right(1)   ; color white
+        label_up(1)   ; color white
+        label_down(1)   ; color white
+
+        sub label_left(ubyte color) {
+            txt.color(color)
+            txt.plot(6,16)
+            txt.chrout('l')
+            txt.plot(6,17)
+            txt.chrout('e')
+            txt.plot(6,18)
+            txt.chrout('f')
+            txt.plot(6,19)
+            txt.chrout('t')
+        }
+
+        sub label_right(ubyte color) {
+            txt.color(color)
+            txt.plot(13,16)
+            txt.chrout('r')
+            txt.plot(13,17)
+            txt.chrout('i')
+            txt.plot(13,18)
+            txt.chrout('g')
+            txt.plot(13,19)
+            txt.chrout('h')
+            txt.plot(13,20)
+            txt.chrout('t')
+        }
+
+        sub label_up(ubyte color) {
+            txt.color(color)
+            txt.plot(9,14)
+            txt.print("up")
+        }
+
+        sub label_down(ubyte color) {
+            txt.color(color)
+            txt.plot(8,21)
+            txt.print("down")
+        }
+
+        sub leftright(ubyte col, ubyte color) {
+            txt.color(color)
+            txt.plot(col,17)
+            txt.chrout(scr2pet($62))
+            txt.plot(col,18)
+            txt.rvs_on()
+            txt.chrout(scr2pet($e2))
+            txt.rvs_off()
+        }
+
+        sub leftrightfull(ubyte col, ubyte color) {
+            txt.color(color)
+            txt.plot(col,17)
+            txt.rvs_on()
+            txt.chrout(scr2pet($a0))
+            txt.plot(col,18)
+            txt.chrout(scr2pet($a0))
+            txt.rvs_off()
+        }
+
+        sub updown(ubyte row, ubyte color) {
+            txt.color(color)
+            txt.plot(9,row)
+            txt.rvs_on()
+            txt.chrout(scr2pet($e1))
+            txt.rvs_off()
+            txt.chrout(scr2pet($61))
+        }
+
+        sub updownfull(ubyte row, ubyte color) {
+            txt.color(color)
+            txt.plot(9,row)
+            txt.rvs_on()
+            txt.chrout(scr2pet($a0))
+            txt.chrout(scr2pet($a0))
+            txt.rvs_off()
+        }
+    }
+
+    sub selectstart() {
+        half(16,18,11)
+        half(17,17,11)
+        half(19,18,11)
+        half(20,17,11)
+
+        label_select(1) ; color white
+        label_start(1) ; color white
+
+        sub label_select(ubyte color) {
+            txt.color(color)
+            txt.plot(15,15)
+            txt.print("select")
+        }
+
+        sub label_start(ubyte color) {
+            txt.color(color)
+            txt.plot(18,20)
+            txt.print("start")
+        }
+
+        sub half(ubyte col, ubyte row, ubyte color) {
+            txt.color(color)
+            txt.plot(col,row)
+            txt.rvs_on()
+            txt.chrout(scr2pet($e9))
+            txt.rvs_off()
+            txt.chrout(scr2pet($69))
+        }
+    }
+
+    sub buttons() {
+        circle(30,17,6)
+        circle(27,19,6)
+        circle(27,15,14)
+        circle(24,17,14)
+
+        txt.setcc(32,17,$1,1)   ; A in white
+        txt.setcc(26,20,$2,1)   ; B in white
+        txt.setcc(29,15,$18,1)  ; X in white
+        txt.setcc(23,18,$19,1)  ; Y in white
+
+        sub circle(ubyte col, ubyte row, ubyte color) {
+            txt.color(color)
+            txt.plot(col,row)
+            txt.chrout(scr2pet($55))
+            txt.chrout(scr2pet($49))
+            txt.plot(col,row+1)
+            txt.chrout(scr2pet($4a))
+            txt.chrout(scr2pet($4b))
+        }
+    }
+
+    sub shoulders() {
+        left(15)
+        right(15)
+
+        label_left(1)   ; color white
+        label_right(1)  ; color white
+
+        sub label_left(ubyte color) {
+            txt.color(color)
+            txt.plot(3,11)
+            txt.print("left")
+        }
+
+        sub label_right(ubyte color) {
+            txt.color(color)
+            txt.plot(32,11)
+            txt.print("right")
+        }
+
+        sub left(ubyte color) {
+            txt.color(color)
+            txt.plot(8,11)
+            txt.chrout(scr2pet($62))
+            txt.chrout(scr2pet($62))
+            txt.chrout(scr2pet($79))
+            txt.chrout(scr2pet($79))
+            txt.chrout(scr2pet($6f))
+            txt.chrout(scr2pet($6f))
+        }
+        sub right(ubyte color) {
+            txt.color(color)
+            txt.plot(25,11)
+            txt.chrout(scr2pet($6f))
+            txt.chrout(scr2pet($6f))
+            txt.chrout(scr2pet($79))
+            txt.chrout(scr2pet($79))
+            txt.chrout(scr2pet($62))
+            txt.chrout(scr2pet($62))
+        }
+    }
+
+    sub scr2pet(ubyte scr) -> ubyte {
+        when scr {
+            0 to 31     -> return scr+64
+            32 to 63    -> return scr
+            64 to 93    -> return scr+128
+            94          -> return 255
+            95          -> return 223
+            96 to 127   -> return scr+64
+            128 to 191  -> return scr-128
+            192 to 255  -> return scr-64
         }
     }
 }

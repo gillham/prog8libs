@@ -44,6 +44,21 @@ input {
     const uword JOY_CPGS    = JOY_CP|BUTTON_B|BUTTON_X
     const uword CTL_SNES    = %1111111111110000
 
+    ; control states updated by scan()
+    bool button_b
+    bool button_y
+    bool button_select
+    bool button_start
+    bool dpad_up
+    bool dpad_down
+    bool dpad_left
+    bool dpad_right
+    bool button_a
+    bool button_x
+    bool button_l
+    bool button_r
+
+    ; Device structure with device details and get() routine
     struct Device {
         uword get           ; address of get routine for call()
         ubyte type          ; input device type
@@ -97,7 +112,7 @@ input {
     sub get(ubyte index) -> uword {
         uword result
         ^^Device dev = getdev(index)
-        call(dev.get)
+        void call(dev.get)
 ;        %asm {{
 ;            sta  p8b_input.p8s_get.p8v_result
 ;            sty  p8b_input.p8s_get.p8v_result+1
@@ -117,6 +132,74 @@ input {
     ; returns address of device table
     sub gettab() -> uword {
         return &inputdev.l_inputdevtab
+    }
+
+    ; clears control state variables (back to boolean false)
+    sub clear() {
+        ; upper byte
+        button_b = false
+        button_y = false
+        button_select = false
+        button_start = false
+        dpad_up = false
+        dpad_down = false
+        dpad_left = false
+        dpad_right = false
+
+        ; lower byte
+        button_a = false
+        button_x = false
+        button_l = false
+        button_r = false
+    }
+
+    ; scans controller's state to bool variables
+    sub scan(ubyte index) {
+        uword temp = get(index)
+        ; upper byte
+        button_b = temp & BUTTON_B == 0
+        button_y = temp & BUTTON_Y == 0
+        button_select = temp & BUTTON_SELECT == 0
+        button_start = temp & BUTTON_START == 0
+        dpad_up = temp & DPAD_UP == 0
+        dpad_down = temp & DPAD_DOWN == 0
+        dpad_left = temp & DPAD_LEFT == 0
+        dpad_right = temp & DPAD_RIGHT == 0
+
+        ; lower byte
+        button_a = temp & BUTTON_A == 0
+        button_x = temp & BUTTON_X == 0
+        button_l = temp & BUTTON_L == 0
+        button_r = temp & BUTTON_R == 0
+    }
+
+    ; scans all known controller's state to bool variables
+    sub scan_all() {
+        ubyte i
+        uword temp = $ffff
+
+        ; combine all controllers values
+        repeat count() {
+            temp &= input.get(i)
+            i++
+        }
+;        decode(1,temp)
+
+        ; upper byte
+        button_b = temp & BUTTON_B == 0
+        button_y = temp & BUTTON_Y == 0
+        button_select = temp & BUTTON_SELECT == 0
+        button_start = temp & BUTTON_START == 0
+        dpad_up = temp & DPAD_UP == 0
+        dpad_down = temp & DPAD_DOWN == 0
+        dpad_left = temp & DPAD_LEFT == 0
+        dpad_right = temp & DPAD_RIGHT == 0
+
+        ; lower byte
+        button_a = temp & BUTTON_A == 0
+        button_x = temp & BUTTON_X == 0
+        button_l = temp & BUTTON_L == 0
+        button_r = temp & BUTTON_R == 0
     }
 
     sub info() {

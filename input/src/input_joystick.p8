@@ -1,7 +1,7 @@
 ;
 ; C64 control port joysticks
 ; This module supports vanilla C64 joysticks
-; with a signle fire button as well as C64GS
+; with a single fire button as well as C64GS
 ; style with a 2nd on POTX.  A 3rd on POTY
 ; is also supported. 
 ;
