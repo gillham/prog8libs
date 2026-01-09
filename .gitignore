@@ -4,3 +4,8 @@
 build/
 # ignore CTags files
 tags
+# JetBrains config
+.idea/
+# platform files
+config
+libraries
