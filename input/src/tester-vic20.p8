@@ -130,7 +130,7 @@ main {
         ubyte i
         ubyte port
         txt.plot(0,0)
-        txt.print("      --=== controller menu ===--")
+        txt.print("-= controller menu =-")
         txt.nl()
         for i in 1 to input.count() {
             mydev = input.getdev(i-1)

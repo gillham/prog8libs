@@ -1,7 +1,7 @@
 platform {
     const ubyte dpad_color = cbm.COLOR_BLUE
-    const ubyte select_color = cbm.COLOR_PURPLE
-    const ubyte start_color = cbm.COLOR_PURPLE
+    const ubyte select_color = cbm.COLOR_WHITE
+    const ubyte start_color = cbm.COLOR_WHITE
     const ubyte ab_color = cbm.COLOR_BLUE
     const ubyte xy_color = cbm.COLOR_CYAN
     const ubyte shoulder_color = cbm.COLOR_GREEN

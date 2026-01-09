@@ -74,7 +74,8 @@ emu-c64-tester:	all disk
 	$(EMU) -autostartprgmode 1 build/tester.prg
 
 emu-vic20-tester:	build/tester-vic20.prg
-	xvic -keymap 1 -memory 3k -extrajoydev1 5 -userportdevice 18 -autostartprgmode 1 build/tester-vic20.prg
+	#xvic -keymap 1 -memory 3k -extrajoydev1 4 -userportdevice 18 -autostartprgmode 1 build/tester-vic20.prg
+	xvic-sdl -default -model vic20ntsc -keymap 1 -memory 3k $(EMU_JOYSTICK) -autostartprgmode 1 build/tester-vic20.prg
 
 #
 # end-of-file
