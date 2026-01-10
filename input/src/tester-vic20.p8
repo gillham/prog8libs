@@ -21,16 +21,11 @@ main {
 
         platform.init()
 
-;        txt.cls()
-;        repeat {
-;            txt.plot(0,0)
-;            txt.print_ubbin(joystick.read_cp1(), false)
-;        }
-
         repeat {
             last_pins = 255
             txt.cls()
             draw.screen()
+            draw.title()
             txt.plot(0,0)
             port = selector()
             mydev = input.getdev(port)
@@ -49,6 +44,7 @@ main {
                 txt.nl()
                 txt.nl()
                 txt.print(mydev.name)
+                draw.help()
                 decode(pins)
             }
             key = port = 0
@@ -129,6 +125,8 @@ main {
     sub menu() -> ubyte {
         ubyte i
         ubyte port
+        txt.cls()
+        txt.color(1)
         txt.plot(0,0)
         txt.print("-= controller menu =-")
         txt.nl()
@@ -214,6 +212,33 @@ main {
 }
 
 draw {
+    sub help() {
+        txt.color(1)
+        txt.plot(0,4)
+        txt.print("joystick/snespad test")
+        txt.nl()
+        txt.print("j: to select again")
+        txt.nl()
+        txt.print("m: for plain menu")
+        txt.nl()
+        txt.print("(press m a lot maybe)")
+    }
+
+    sub title() {
+        txt.color(1)
+        txt.plot(0,0)
+        txt.print("joystick/snespad test")
+        txt.nl()
+        txt.nl()
+        txt.print("keys a/d + return")
+        txt.nl()
+        txt.print("joy left/right + fire")
+        txt.nl()
+        txt.print("to select driver")
+        txt.nl()
+        txt.print("(no feedback below)")
+    }
+
     sub screen() {
         ; draw initial state
         controller()

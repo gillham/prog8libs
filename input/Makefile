@@ -41,6 +41,8 @@ EMU=$(EMU_CMD) $(EMU_BASE) $(EMU_KERNAL) $(EMU_DISK) $(EMU_DOS) $(EMU_REU) $(EMU
 PCC=prog8c
 PCCARGSC64=-srcdirs src:src/c64 -asmlist -target c64 -out build
 PCCARGSVIC20=-srcdirs src:src/vic20 -asmlist -target config/vic20plus3.properties -out build
+PCCARGSPLUS4=-srcdirs src:src/plus4 -asmlist -target config/plus4.properties -out build
+PCCARGSMEGA65=-srcdirs src:src/mega65 -asmlist -target config/mega65.properties -out build
 
 PROGS	= build/main.prg build/tester.prg
 SRCS	= src/main.p8 src/input*.p8
@@ -55,6 +57,16 @@ build/main.prg: $(SRCS)
 
 build/tester.prg: src/tester.p8 $(SRCS)
 	$(PCC) $(PCCARGSC64) $<
+
+build/tester-mega65.prg: src/tester.p8 src/mega65/*
+	$(PCC) $(PCCARGSMEGA65) $<
+	$(CP) build/tester.prg $@
+	$(RM) build/tester.prg
+
+build/tester-plus4.prg: src/tester.p8 src/plus4/*
+	$(PCC) $(PCCARGSPLUS4) $<
+	$(CP) build/tester.prg $@
+	$(RM) build/tester.prg
 
 build/tester-vic20.prg: src/tester-vic20.p8 src/vic20/*
 	$(PCC) $(PCCARGSVIC20) $<
@@ -72,6 +84,12 @@ emu-c64:	all disk
 
 emu-c64-tester:	all disk
 	$(EMU) -autostartprgmode 1 build/tester.prg
+
+emu-mega65-tester:	build/tester-mega65.prg
+	xmega65 -model 5 -besure -videostd 1 -prgmode 65 -prg build/tester-mega65.prg
+
+emu-plus4-tester:	build/tester-plus4.prg
+	xplus4-sdl -default -keymap 1 $(EMU_JOYSTICK) -autostartprgmode 1 build/tester-plus4.prg 
 
 emu-vic20-tester:	build/tester-vic20.prg
 	#xvic -keymap 1 -memory 3k -extrajoydev1 4 -userportdevice 18 -autostartprgmode 1 build/tester-vic20.prg

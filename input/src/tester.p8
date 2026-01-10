@@ -21,14 +21,11 @@ main {
 
         platform.init()
 
-        ;txt.lowercase()
-;        draw.screen()
-;        repeat{draw.animate($1234)}
-;        ^^input.Device mydev
         repeat {
             last_pins = 255
             txt.cls()
             draw.screen()
+            draw.title()
             ;input.info()
             txt.plot(0,0)
             port = selector()
@@ -42,11 +39,12 @@ main {
                 pins = input.get(port)
                 if pins == last_pins continue
                 last_pins = pins
+                txt.color(1)
                 txt.plot(0,0)
                 txt.print_uwbin(pins, false)
                 txt.spc()
                 txt.print(mydev.name)
-                ;input.decode(1,pins)
+                draw.help()
                 decode(pins)
             }
             key = port = 0
@@ -127,6 +125,8 @@ main {
     sub menu() -> ubyte {
         ubyte i
         ubyte port
+        txt.cls()
+        txt.color(1)
         txt.plot(0,0)
         txt.print("      --=== controller menu ===--")
         txt.nl()
@@ -164,7 +164,9 @@ main {
             if index != last_index {
                 last_index = index
                 txt.plot(0,9)
-                repeat txt.DEFAULT_WIDTH {
+                ; drawing a full 40 causes a line feed on Plus/4.
+                ; reducing by one is ok.
+                repeat txt.DEFAULT_WIDTH-1 {
                     txt.spc()
                 }
             }
@@ -217,6 +219,34 @@ main {
 }
 
 draw {
+    sub help() {
+        txt.color(1)
+        txt.plot(6,3)
+        txt.print("joystick & snes pad tester")
+        txt.nl()
+        txt.nl()
+        txt.print("press j to select again")
+        txt.nl()
+        txt.print("press m for plain menu")
+        txt.nl()
+        txt.print("(press m a lot if goofy input)")
+    }
+
+    sub title() {
+        txt.color(1)
+        txt.plot(6,0)
+        txt.print("joystick & snes pad tester")
+        txt.nl()
+        txt.nl()
+        txt.print("keyboard use a/d + return")
+        txt.nl()
+        txt.print("joystick left/right + fire/a")
+        txt.nl()
+        txt.print("to select driver to test")
+        txt.nl()
+        txt.print("(no feedback until test mode)")
+    }
+
     sub screen() {
         ; draw initial state
         controller()
