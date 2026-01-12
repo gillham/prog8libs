@@ -1,4 +1,6 @@
 platform {
+    const bool SCAN_ALL = true
+
     sub init() {
 ;        c64.EXTCOL = 0
 ;        c64.BGCOL0 = 0
