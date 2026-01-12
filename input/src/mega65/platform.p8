@@ -1,12 +1,29 @@
+;
+; Platform specific bits
+;
 platform {
     const bool SCAN_ALL = true
 
     sub init() {
+
+        ; black background & border
         c64.EXTCOL = 0
         c64.BGCOL0 = 0
+
+        ; switch to 40 column mode
+        txt.chrout(27)
+        txt.chrout('4')
+
+        ; delay long enough for any keys to clear
+        ; could just be emulator, needs more testing
+        sys.wait(10)
     }
 }
 
+;
+; platforms should define native joystick directions
+; for input.remap() to decode and create SNES data.
+;
 input {
 %option merge
     ; joystick bits

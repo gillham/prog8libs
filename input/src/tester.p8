@@ -26,7 +26,6 @@ main {
             txt.cls()
             draw.screen()
             draw.title()
-            ;input.info()
             txt.plot(0,0)
             port = selector()
             mydev = input.getdev(port)
@@ -166,14 +165,14 @@ main {
                 txt.plot(0,9)
                 ; drawing a full 40 causes a line feed on Plus/4.
                 ; reducing by one is ok.
-                repeat txt.DEFAULT_WIDTH-1 {
+                repeat 39 {
                     txt.spc()
                 }
             }
             mydev = input.getdev(index)
             length = strings.length(mydev.name)
-            if length+6 < txt.DEFAULT_WIDTH {
-                txt.plot((txt.DEFAULT_WIDTH-length-6)/2,9)
+            if length+6 < 39 {
+                txt.plot((40-length-6)/2,9)
             } else {
                 txt.plot(0,9)
             }
@@ -183,17 +182,15 @@ main {
             txt.print(mydev.name)
             txt.print(" >>")
             txt.rvs_off()
-            ;input.clear()
-            input.scan_all()
-            ;i=0
-            ;repeat count {
-            ;    pins &= input.get(i)
-            ;    i++
-            ;}
-            ;decode(pins)
-            done = input.button_a or input.button_b or input.button_x
-            done = done or input.button_y or input.button_r or input.button_l
-            ;if input.button_a != last_button_a and input.button_a == true done=true
+            ; scan all supported devices or just keyboard
+            ; depending on platform setting
+            if platform.SCAN_ALL
+                input.scan_all()
+            else
+                input.scan(0)
+            ;done = input.button_a or input.button_b or input.button_x
+            ;done = done or input.button_y or input.button_r or input.button_l
+            done = input.button_a
             if input.dpad_left != last_dpad_left and input.dpad_left == true {
                 if index > 0
                     index--
@@ -205,10 +202,10 @@ main {
             last_button_a = input.button_a
             last_dpad_left = input.dpad_left
             last_dpad_right = input.dpad_right
-            ;pins = $ffff
+
             if cbm.GETIN2() == 'm' {
                 txt.plot(0,9)
-                repeat txt.DEFAULT_WIDTH {
+                repeat 39 {
                     txt.spc()
                 }
                 return menu()

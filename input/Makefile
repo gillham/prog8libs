@@ -85,7 +85,7 @@ emu-c64:	all disk
 emu-c64-tester:	all disk
 	$(EMU) -autostartprgmode 1 build/tester.prg
 
-emu-mega65-tester:	build/tester-mega65.prg
+emu-mega65-tester:	clean build/tester-mega65.prg
 	xmega65 -model 5 -besure -videostd 1 -prgmode 65 -prg build/tester-mega65.prg
 
 emu-plus4-tester:	build/tester-plus4.prg
