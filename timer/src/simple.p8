@@ -12,8 +12,8 @@ main {
     bool simple_fired = false
 
     sub start() {
-        ; required to establish IRQ routine
-        timer.init()
+;        ; required to establish IRQ routine
+;        timer.init()
 
         ; queue a simple one-shot timer for 20 jiffies.
         timer.simple(20, simplecallback)
