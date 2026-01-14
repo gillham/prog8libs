@@ -39,9 +39,6 @@ main {
         txt.print("calling timer.shutdown()\n")
         timer.shutdown()
 
-        txt.print("done... timer.count: ")
-        txt.print_uw(timer.count)
-        txt.nl()
         txt.print("done... main.count: ")
         txt.print_uw(main.count)
         txt.nl()

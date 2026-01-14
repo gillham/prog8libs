@@ -11,6 +11,9 @@ timer {
     uword[MAX_TIMERS] @nosplit queue
     ubyte number
 
+    ; whether IRQ is started or not
+    bool irq_started = false
+
     ; quick timer (uword based)
     ; 1092 seconds, ~18 minutes maximum
     struct Timer {
@@ -71,6 +74,8 @@ timer {
 
     ^^timer.Timer stimer = ^^timer.Timer: [ $0000, $0000, 0, 0 ]
     sub simple(uword jiffies, uword callback) -> bool {
+        if not timer.irq_started
+            timer.init()
         stimer.time = jiffies
         stimer.callback = callback
         stimer.flags = FLAG_SIMPLE
@@ -81,6 +86,7 @@ timer {
     sub init() {
         ;txt.print("enabling irqhandler\n")
         sys.set_irq(&irq.irqhandler)     ; register irq handler
+        timer.irq_started = true
     }
 
     sub shutdown() {
