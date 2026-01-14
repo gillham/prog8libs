@@ -3,6 +3,7 @@
 ;
 platform {
     const bool SCAN_ALL = true
+    const bool MONOCHROME = false
 
     sub init() {
 

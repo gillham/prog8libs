@@ -461,13 +461,20 @@ draw {
         }
 
         sub leftright(ubyte col, ubyte color) {
-            txt.color(color)
-            txt.plot(col,17)
-            txt.chrout(scr2pet($62))
-            txt.plot(col,18)
-            txt.rvs_on()
-            txt.chrout(scr2pet($e2))
-            txt.rvs_off()
+            if platform.MONOCHROME and color == 2 {
+                txt.plot(col,17)
+                txt.chrout('x')
+                txt.plot(col,18)
+                txt.chrout('x')
+            } else {
+                txt.color(color)
+                txt.plot(col,17)
+                txt.chrout(scr2pet($62))
+                txt.plot(col,18)
+                txt.rvs_on()
+                txt.chrout(scr2pet($e2))
+                txt.rvs_off()
+            }
         }
 
         sub leftrightfull(ubyte col, ubyte color) {
@@ -481,12 +488,18 @@ draw {
         }
 
         sub updown(ubyte row, ubyte color) {
-            txt.color(color)
-            txt.plot(9,row)
-            txt.rvs_on()
-            txt.chrout(scr2pet($e1))
-            txt.rvs_off()
-            txt.chrout(scr2pet($61))
+            if platform.MONOCHROME and color == 2 {
+                txt.plot(9,row)
+                txt.chrout('x')
+                txt.chrout('x')
+            } else {
+                txt.color(color)
+                txt.plot(9,row)
+                txt.rvs_on()
+                txt.chrout(scr2pet($e1))
+                txt.rvs_off()
+                txt.chrout(scr2pet($61))
+            }
         }
 
         sub updownfull(ubyte row, ubyte color) {
@@ -521,12 +534,18 @@ draw {
         }
 
         sub half(ubyte col, ubyte row, ubyte color) {
-            txt.color(color)
-            txt.plot(col,row)
-            txt.rvs_on()
-            txt.chrout(scr2pet($e9))
-            txt.rvs_off()
-            txt.chrout(scr2pet($69))
+            if platform.MONOCHROME and color == 2 {
+                txt.plot(col,row)
+                txt.chrout('x')
+                txt.chrout('x')
+            } else {
+                txt.color(color)
+                txt.plot(col,row)
+                txt.rvs_on()
+                txt.chrout(scr2pet($e9))
+                txt.rvs_off()
+                txt.chrout(scr2pet($69))
+            }
         }
     }
 
@@ -542,13 +561,26 @@ draw {
         txt.setcc(23,18,$19,1)  ; Y in white
 
         sub circle(ubyte col, ubyte row, ubyte color) {
-            txt.color(color)
-            txt.plot(col,row)
-            txt.chrout(scr2pet($55))
-            txt.chrout(scr2pet($49))
-            txt.plot(col,row+1)
-            txt.chrout(scr2pet($4a))
-            txt.chrout(scr2pet($4b))
+            if platform.MONOCHROME and color == 2 {
+                txt.plot(col,row)
+                ;txt.chrout(scr2pet($55))
+                ;txt.chrout(scr2pet($49))
+                txt.chrout($ec)
+                txt.chrout($fb)
+                txt.plot(col,row+1)
+                ;txt.chrout(scr2pet($4a))
+                ;txt.chrout(scr2pet($4b))
+                txt.chrout($fc)
+                txt.chrout($fe)
+            } else {
+                txt.color(color)
+                txt.plot(col,row)
+                txt.chrout(scr2pet($55))
+                txt.chrout(scr2pet($49))
+                txt.plot(col,row+1)
+                txt.chrout(scr2pet($4a))
+                txt.chrout(scr2pet($4b))
+            }
         }
     }
 
@@ -572,24 +604,41 @@ draw {
         }
 
         sub left(ubyte color) {
-            txt.color(color)
-            txt.plot(8,11)
-            txt.chrout(scr2pet($62))
-            txt.chrout(scr2pet($62))
-            txt.chrout(scr2pet($79))
-            txt.chrout(scr2pet($79))
-            txt.chrout(scr2pet($6f))
-            txt.chrout(scr2pet($6f))
+            if platform.MONOCHROME and color == 2 {
+                txt.plot(8,11)
+                txt.chrout('x')
+                txt.chrout('x')
+                txt.chrout('x')
+            } else {
+                txt.color(color)
+                txt.plot(8,11)
+                txt.chrout(scr2pet($62))
+                txt.chrout(scr2pet($62))
+                txt.chrout(scr2pet($79))
+                txt.chrout(scr2pet($79))
+                txt.chrout(scr2pet($6f))
+                txt.chrout(scr2pet($6f))
+            }
         }
         sub right(ubyte color) {
-            txt.color(color)
-            txt.plot(25,11)
-            txt.chrout(scr2pet($6f))
-            txt.chrout(scr2pet($6f))
-            txt.chrout(scr2pet($79))
-            txt.chrout(scr2pet($79))
-            txt.chrout(scr2pet($62))
-            txt.chrout(scr2pet($62))
+            if platform.MONOCHROME and color == 2 {
+                txt.plot(25,11)
+                txt.chrout(scr2pet($6f))
+                txt.chrout(scr2pet($6f))
+                txt.chrout(scr2pet($79))
+                txt.chrout('x')
+                txt.chrout('x')
+                txt.chrout('x')
+            } else {
+                txt.color(color)
+                txt.plot(25,11)
+                txt.chrout(scr2pet($6f))
+                txt.chrout(scr2pet($6f))
+                txt.chrout(scr2pet($79))
+                txt.chrout(scr2pet($79))
+                txt.chrout(scr2pet($62))
+                txt.chrout(scr2pet($62))
+            }
         }
     }
 

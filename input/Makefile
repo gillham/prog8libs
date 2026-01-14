@@ -40,6 +40,7 @@ EMU=$(EMU_CMD) $(EMU_BASE) $(EMU_KERNAL) $(EMU_DISK) $(EMU_DOS) $(EMU_REU) $(EMU
 
 PCC=prog8c
 PCCARGSC64=-srcdirs src:src/c64 -asmlist -target c64 -out build
+PCCARGSPET32=-srcdirs src:src/pet32 -asmlist -target pet32 -out build
 PCCARGSVIC20=-srcdirs src:src/vic20 -asmlist -target config/vic20plus3.properties -out build
 PCCARGSPLUS4=-srcdirs src:src/plus4 -asmlist -target config/plus4.properties -out build
 PCCARGSMEGA65=-srcdirs src:src/mega65 -asmlist -target config/mega65.properties -out build
@@ -60,6 +61,11 @@ build/tester.prg: src/tester.p8 $(SRCS)
 
 build/tester-mega65.prg: src/tester.p8 src/mega65/*
 	$(PCC) $(PCCARGSMEGA65) $<
+	$(CP) build/tester.prg $@
+	$(RM) build/tester.prg
+
+build/tester-pet32.prg: src/tester.p8 src/pet32/*
+	$(PCC) $(PCCARGSPET32) $<
 	$(CP) build/tester.prg $@
 	$(RM) build/tester.prg
 
@@ -87,6 +93,9 @@ emu-c64-tester:	all disk
 
 emu-mega65-tester:	clean build/tester-mega65.prg
 	xmega65 -model 5 -besure -videostd 1 -prgmode 65 -prg build/tester-mega65.prg
+
+emu-pet32-tester:	clean build/tester-pet32.prg
+	xpet-sdl -default -model 4032 -keymap 0 $(EMU_JOYSTICK) -autostartprgmode 1 build/tester-pet32.prg
 
 emu-plus4-tester:	build/tester-plus4.prg
 	xplus4-sdl -default -keymap 1 $(EMU_JOYSTICK) -autostartprgmode 1 build/tester-plus4.prg 
