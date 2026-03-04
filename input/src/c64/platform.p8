@@ -10,6 +10,8 @@ platform {
 
 input {
 %option merge
+%option ignore_unused
+
     ; joystick bits
     const ubyte UP      = %0000001
     const ubyte DOWN    = %0000010

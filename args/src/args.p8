@@ -1,6 +1,8 @@
 %import textio
 
 args {
+    %option ignore_unused
+
     const uword argptr  = $0200
     const ubyte REM     = $8f
     const ubyte SPC     = $20

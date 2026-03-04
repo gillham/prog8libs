@@ -22,6 +22,7 @@
 inputdev {
 %option force_output
 %option merge
+%option ignore_unused
 
 l_joystick:
     %asm {{
@@ -38,6 +39,7 @@ l_joystick:
 joystick {
 %option force_output
 %option merge
+%option ignore_unused
 
     ^^input.Device dev0 = ^^input.Device: [ read_port1,
                                             input.JOYSTICK,

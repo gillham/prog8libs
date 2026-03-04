@@ -1,4 +1,6 @@
 monitor {
+    %option ignore_unused
+
     sub open() {
         %asm {{
             jmp $2000

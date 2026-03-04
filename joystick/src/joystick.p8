@@ -2,6 +2,8 @@
 ; read joystick ports
 ;
 joystick {
+%option ignore_unused
+
     const ubyte UP      = %0000001
     const ubyte DOWN    = %0000010
     const ubyte LEFT    = %0000100

@@ -1,6 +1,8 @@
 %import monitor
 %import textio
 debug {
+    %option ignore_unused
+
     const ubyte EQ = 1
     const ubyte NE = 2
     const ubyte GT = 3

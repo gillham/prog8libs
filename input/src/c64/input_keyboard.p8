@@ -23,6 +23,7 @@
 inputdev {
 %option force_output
 %option merge
+%option ignore_unused
 
 l_keyboard:
     %asm {{
@@ -37,6 +38,7 @@ l_keyboard:
 keyboard {
 %option force_output
 %option merge
+%option ignore_unused
 
     ^^input.Device dev0 = ^^input.Device: [ read,
                                             input.KEYBOARD,

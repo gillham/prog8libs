@@ -17,6 +17,7 @@
 inputdev {
 %option force_output
 %option merge
+%option ignore_unused
 
 l_snes_petscii:
     %asm {{
@@ -31,6 +32,7 @@ l_snes_petscii:
 snes_petscii {
 %option force_output
 %option merge
+%option ignore_unused
 
     ^^input.Device dev0 = ^^input.Device: [ read,
                                             input.CONTROLLER,

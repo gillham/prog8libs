@@ -6,6 +6,8 @@
 %import textio
 
 timer {
+    %option ignore_unused
+
     ; 8 timer slots
     const ubyte MAX_TIMERS = 8
     uword[MAX_TIMERS] @nosplit queue
@@ -97,6 +99,8 @@ timer {
 
 
 irq {
+    %option ignore_unused
+
     ^^timer.Timer itimer
 
     ; do callbacks on any expired timers
