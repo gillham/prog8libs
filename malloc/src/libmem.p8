@@ -28,9 +28,11 @@ mem {
     ; program to the start of I/O space.
     sub init() {
         uword temp
+        ubyte sys_target
         if started return
         mempool = sys.progend()
-        when sys.target {
+        sys_target = sys.target
+        when sys_target {
             16 -> temp = $9f00
             64 -> temp = $d000
             else -> temp = mempool + MIN_RESIZE
