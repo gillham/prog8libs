@@ -1,0 +1,24 @@
+#
+# Comments.
+#
+
+title = "Prog8 User Port library"
+
+[srcdirs]
+path = "src"
+
+[srcdirs.c64]
+path=["src/c64"]
+
+[srcdirs.pet32]
+path=["src/pet32"]
+
+[srcdirs.plus4]
+path=["src/plus4"]
+
+[srcdirs.vic20]
+path=["src","src/vic20"]
+
+#
+# end-of-file
+#
