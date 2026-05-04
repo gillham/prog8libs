@@ -1,0 +1,24 @@
+#
+# Comments.
+#
+
+title = "Prog8 input library"
+
+[srcdirs]
+path = "src"
+
+[srcdirs.c64]
+path=["src/c64"]
+
+[srcdirs.cx16]
+path=["src","src/cx16"]
+
+#[c64]
+#srcdirs=["src","src/c64"]
+
+#[cx16]
+#srcdirs=["src","src/cx16"]
+
+#
+# end-of-file
+#
