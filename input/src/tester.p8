@@ -19,7 +19,7 @@ main {
         uword pins
         uword last_pins
 
-        platform.init()
+        input_platform.init()
 
         repeat {
             last_pins = 255
@@ -189,7 +189,7 @@ main {
             txt.rvs_off()
             ; scan all supported devices or just keyboard
             ; depending on platform setting
-            if platform.SCAN_ALL
+            if input_platform.SCAN_ALL
                 input.scan_all()
             else
                 input.scan(0)
@@ -466,7 +466,7 @@ draw {
         }
 
         sub leftright(ubyte col, ubyte color) {
-            if platform.MONOCHROME and color == 2 {
+            if input_platform.MONOCHROME and color == 2 {
                 txt.plot(col,17)
                 txt.chrout('x')
                 txt.plot(col,18)
@@ -493,7 +493,7 @@ draw {
         }
 
         sub updown(ubyte row, ubyte color) {
-            if platform.MONOCHROME and color == 2 {
+            if input_platform.MONOCHROME and color == 2 {
                 txt.plot(9,row)
                 txt.chrout('x')
                 txt.chrout('x')
@@ -539,7 +539,7 @@ draw {
         }
 
         sub half(ubyte col, ubyte row, ubyte color) {
-            if platform.MONOCHROME and color == 2 {
+            if input_platform.MONOCHROME and color == 2 {
                 txt.plot(col,row)
                 txt.chrout('x')
                 txt.chrout('x')
@@ -566,7 +566,7 @@ draw {
         txt.setcc(23,18,$19,1)  ; Y in white
 
         sub circle(ubyte col, ubyte row, ubyte color) {
-            if platform.MONOCHROME and color == 2 {
+            if input_platform.MONOCHROME and color == 2 {
                 txt.plot(col,row)
                 ;txt.chrout(scr2pet($55))
                 ;txt.chrout(scr2pet($49))
@@ -609,7 +609,7 @@ draw {
         }
 
         sub left(ubyte color) {
-            if platform.MONOCHROME and color == 2 {
+            if input_platform.MONOCHROME and color == 2 {
                 txt.plot(8,11)
                 txt.chrout('x')
                 txt.chrout('x')
@@ -626,7 +626,7 @@ draw {
             }
         }
         sub right(ubyte color) {
-            if platform.MONOCHROME and color == 2 {
+            if input_platform.MONOCHROME and color == 2 {
                 txt.plot(25,11)
                 txt.chrout(scr2pet($6f))
                 txt.chrout(scr2pet($6f))
