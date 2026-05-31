@@ -5,7 +5,7 @@
 %import input_joystick
 %import input_snes_petscii
 
-%import platform
+%import input_platform
 
 %import strings
 %import textio
@@ -43,6 +43,11 @@ main {
                 txt.print_uwbin(pins, false)
                 txt.spc()
                 txt.print(mydev.name)
+                ; debug
+                txt.spc()
+                txt.print_ubhex(joystick.read_potxy.potx, true)
+                txt.spc()
+                txt.print_ubhex(joystick.read_potxy.poty, true)
                 draw.help()
                 decode(pins)
             }

@@ -2,7 +2,7 @@
 %import input_keyboard
 %import input_joystick
 %import input_snes_petscii
-%import platform
+%import input_platform
 %import textio
 main {
     uword snes
