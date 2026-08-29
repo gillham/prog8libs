@@ -38,7 +38,7 @@ snes_petscii {
                                             input.CONTROLLER,
                                             8,
                                             input.CTL_SNES,
-                                            "snes petscii uport",
+                                            "snes petscii up",
                                             "snes-up" ]
 
     sub read() {
