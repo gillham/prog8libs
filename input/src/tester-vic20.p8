@@ -1,7 +1,7 @@
 %zeropage dontuse
 
 %import input
-%import input_keyboard
+%import input_joykey
 %import input_joystick
 %import input_snes_petscii
 
@@ -19,7 +19,7 @@ main {
         uword pins
         uword last_pins
 
-        platform.init()
+        input_platform.init()
 
         repeat {
             last_pins = 255
@@ -68,35 +68,35 @@ main {
             draw.selectstart.half(9,16,2)      ; select
             draw.selectstart.half(10,15,2)      ; select
         } else {
-            draw.selectstart.half(9,16,platform.select_color)      ; select
-            draw.selectstart.half(10,15,platform.select_color)      ; select
+            draw.selectstart.half(9,16,input_platform.select_color)      ; select
+            draw.selectstart.half(10,15,input_platform.select_color)      ; select
         }
         if (temp & input.BUTTON_START) == 0 {
             draw.selectstart.half(11,16,2)      ; start
             draw.selectstart.half(12,15,2)      ; start
         } else {
-            draw.selectstart.half(11,16,platform.start_color)      ; start
-            draw.selectstart.half(12,15,platform.start_color)      ; start
+            draw.selectstart.half(11,16,input_platform.start_color)      ; start
+            draw.selectstart.half(12,15,input_platform.start_color)      ; start
         }
         if (temp & input.DPAD_UP) == 0 {
             draw.dpad.updown(14, 2)      ; up
         } else {
-            draw.dpad.updown(14, platform.dpad_color)      ; up
+            draw.dpad.updown(14, input_platform.dpad_color)      ; up
         }
         if (temp & input.DPAD_DOWN) == 0 {
             draw.dpad.updown(17, 2)      ; down
         } else {
-            draw.dpad.updown(17, platform.dpad_color)      ; down
+            draw.dpad.updown(17, input_platform.dpad_color)      ; down
         }
         if (temp & input.DPAD_LEFT) == 0 {
             draw.dpad.leftright(4, 2)    ; left
         } else {
-            draw.dpad.leftright(4, platform.dpad_color)    ; left
+            draw.dpad.leftright(4, input_platform.dpad_color)    ; left
         }
         if (temp & input.DPAD_RIGHT) == 0 {
             draw.dpad.leftright(7, 2)   ; right
         } else {
-            draw.dpad.leftright(7, platform.dpad_color)   ; right
+            draw.dpad.leftright(7, input_platform.dpad_color)   ; right
         }
 
         ; lower byte
@@ -113,12 +113,12 @@ main {
         if (temp & input.BUTTON_L) == 0 {
             draw.shoulders.left(2)            ; left shoulder
         } else {
-            draw.shoulders.left(platform.shoulder_color)            ; left shoulder
+            draw.shoulders.left(input_platform.shoulder_color)            ; left shoulder
         }
         if (temp & input.BUTTON_R) == 0 {
             draw.shoulders.right(2)           ; right shoulder
         } else {
-            draw.shoulders.right(platform.shoulder_color)           ; right shoulder
+            draw.shoulders.right(input_platform.shoulder_color)           ; right shoulder
         }
     }
 
@@ -336,7 +336,7 @@ draw {
     }
 
     sub dpad() {
-        txt.color(platform.dpad_color)
+        txt.color(input_platform.dpad_color)
         ; center of dpad
         txt.plot(5,15)
         txt.rvs_on()
@@ -347,10 +347,10 @@ draw {
         txt.chrout(scr2pet($ec))
         txt.rvs_off()
 
-        updown(14, platform.dpad_color)  ; up
-        updown(17, platform.dpad_color)  ; down
-        leftright(4, platform.dpad_color) ; left
-        leftright(7, platform.dpad_color) ; right
+        updown(14, input_platform.dpad_color)  ; up
+        updown(17, input_platform.dpad_color)  ; down
+        leftright(4, input_platform.dpad_color) ; left
+        leftright(7, input_platform.dpad_color) ; right
 
 ;        label_left(1)   ; color white
 ;        label_right(1)   ; color white
@@ -435,10 +435,10 @@ draw {
     }
 
     sub selectstart() {
-        half(9,16,platform.select_color)
-        half(10,15,platform.select_color)
-        half(11,16,platform.start_color)
-        half(12,15,platform.start_color)
+        half(9,16,input_platform.select_color)
+        half(10,15,input_platform.select_color)
+        half(11,16,input_platform.start_color)
+        half(12,15,input_platform.start_color)
 ;        label_select(1) ; color white
 ;        label_start(1) ; color white
 
@@ -487,8 +487,8 @@ draw {
     }
 
     sub shoulders() {
-        left(platform.shoulder_color)
-        right(platform.shoulder_color)
+        left(input_platform.shoulder_color)
+        right(input_platform.shoulder_color)
 
 ;        label_left(1)   ; color white
 ;        label_right(1)  ; color white

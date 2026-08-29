@@ -1,13 +1,11 @@
 ;
-; Simplistic "virtual joystick" via the keyboard
+; Fake "dummy" keyboard
 ;
 ; This makes it easy to have a "keyboard" choice
-; when selecting inputs.  It also conveniently
-; returns data in the SNES 16-bit data format.
+; when selecting inputs.
 ;
-; This is just reading the matrix coordinate of
-; the current key pressed from $CB
-;
+; It does not actually scan the keyboard or return data.
+; Use input_joykey for a keyboard based virtual joystick
 
 ;
 ; This block holds a uword pointer to a Device
@@ -23,6 +21,7 @@
 inputdev {
 %option force_output
 %option merge
+%option ignore_unused
 
 l_keyboard:
     %asm {{
@@ -37,6 +36,7 @@ l_keyboard:
 keyboard {
 %option force_output
 %option merge
+%option ignore_unused
 
     ^^input.Device dev0 = ^^input.Device: [ read,
                                             input.KEYBOARD,
@@ -45,22 +45,8 @@ keyboard {
                                             "keyboard",
                                             "keyb" ]
 
-    ; get the keyboard matrix scan code
-    ; the state of shift is set to bit 7
-    ; this allows detecting the correct arrow key
+    ; always returns "nothing pressed"
     sub read() {
-        ubyte key = @($cb)
-        key |= (@($028d) & 1) << 7
-        uword temp
-        when key {
-            64, $c0 -> {}
-            9,  $9f -> temp |= input.DPAD_UP
-            17, $97 -> temp |= input.DPAD_LEFT
-            41, $1f -> temp |= input.DPAD_DOWN
-            18, $17 -> temp |= input.DPAD_RIGHT
-            15      -> temp |= input.BUTTON_A
-            ;else -> txt.print_ubhex(key, true)  ; debug
-        }
-        input.get.result = ~temp
+        input.get.result = $ffff
     }
 }

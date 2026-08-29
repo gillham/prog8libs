@@ -1,4 +1,4 @@
-platform {
+input_platform {
     const ubyte dpad_color = cbm.COLOR_BLUE
     const ubyte select_color = cbm.COLOR_WHITE
     const ubyte start_color = cbm.COLOR_WHITE

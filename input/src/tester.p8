@@ -1,7 +1,7 @@
 %zeropage dontuse
 
 %import input
-%import input_keyboard
+%import input_joykey
 %import input_joystick
 %import input_snes_petscii
 
@@ -44,10 +44,10 @@ main {
                 txt.spc()
                 txt.print(mydev.name)
                 ; debug
-                txt.spc()
-                txt.print_ubhex(joystick.read_potxy.potx, true)
-                txt.spc()
-                txt.print_ubhex(joystick.read_potxy.poty, true)
+;                txt.spc()
+;                txt.print_ubhex(joystick.read_potxy.potx, true)
+;                txt.spc()
+;                txt.print_ubhex(joystick.read_potxy.poty, true)
                 draw.help()
                 decode(pins)
             }

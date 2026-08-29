@@ -1,4 +1,4 @@
-platform {
+input_platform {
     const bool SCAN_ALL = false
     const bool MONOCHROME = true
 
