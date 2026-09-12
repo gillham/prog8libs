@@ -1,6 +1,3 @@
-; this imported module should relocate
-%import cbm_compat
-
 input_platform {
     const ubyte dpad_color = cbm.COLOR_BLUE
     const ubyte select_color = cbm.COLOR_WHITE

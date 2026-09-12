@@ -1,5 +1,8 @@
 %zeropage dontuse
 
+; this color stuff should move
+%import cbm_compat
+
 %import input
 %import input_joykey
 %import input_joystick
