@@ -36,8 +36,8 @@ snes_petscii {
                                             input.CONTROLLER,
                                             8,
                                             input.CTL_SNES,
-                                            "snes petscii up",
-                                            "snes-up" ]
+                                            "snes petscii",
+                                            "snespet" ]
 
     sub read() {
         uword pins
